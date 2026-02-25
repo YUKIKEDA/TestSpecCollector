@@ -1,5 +1,8 @@
 namespace TestSpecCollectorTests
 {
+    /// <summary>
+    /// テストサンプルクラス
+    /// </summary>
     public class TestSample
     {
         // パターン1: 完全な仕様記述
