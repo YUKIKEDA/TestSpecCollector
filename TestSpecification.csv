@@ -1,8 +1,8 @@
-﻿TestID,ClassName,Title(MethodName),Preconditions,Steps,ExpectedResult,Summary(Optional)
-"USR-001","TestSample","正常系_有効なユーザーでログインできる","- 登録済みの有効なユーザーが存在する
+﻿TestID,Title(MethodName),Preconditions,Steps,ExpectedResult,Summary(Optional)
+"TestSample-001","正常系_有効なユーザーでログインできる","- 登録済みの有効なユーザーが存在する
 - ログイン画面を開いている","1. ユーザーID ""testuser"" を入力
 2. パスワード ""password123"" を入力
 3. 「ログイン」ボタンを押下","- ダッシュボード画面へ遷移すること
 - ヘッダーに「ようこそ」と表示されること","(省略可能) メソッド名で十分な場合はsummaryを書かなくてOK"
-"USR-002","TestSample","異常系_無効なパスワードでエラーになる","","","",""
-"","TestSample","管理者メニューが表示される","","","設定画面が開くこと","管理者権限の確認テスト"
+"TestSample-002","異常系_無効なパスワードでエラーになる","","","",""
+"TestSample-003","管理者メニューが表示される","","","設定画面が開くこと","管理者権限の確認テスト"

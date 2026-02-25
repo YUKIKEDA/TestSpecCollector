@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Xml.Linq;
@@ -38,22 +39,24 @@ namespace TestSpecCollector
                 // CSV作成用バッファ
                 var csvBuilder = new StringBuilder();
 
-                // CSVヘッダー (Excelで開きやすい構成)
-                csvBuilder.AppendLine("TestID,ClassName,Title(MethodName),Preconditions,Steps,ExpectedResult,Summary(Optional)");
+                // CSVヘッダー (TestIDにクラス名を含めるため ClassName は不要)
+                csvBuilder.AppendLine("TestID,Title(MethodName),Preconditions,Steps,ExpectedResult,Summary(Optional)");
 
                 int count = 0;
 
                 // すべてのクラスを走査
                 foreach (var type in assembly.GetTypes())
                 {
-                    // すべてのメソッドを走査 (PublicかつInstanceメソッド)
-                    foreach (var method in type.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly))
-                    {
-                        // テストメソッド判定
-                        if (!IsTestMethod(method)) continue;
+                    var testMethods = type.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly)
+                        .Where(m => IsTestMethod(m))
+                        .ToList();
+                    int methodIndex = 0;
 
-                        // 1. TestIDの取得 (属性から)
-                        string testId = GetTestId(method);
+                    foreach (var method in testMethods)
+                    {
+                        methodIndex++;
+                        // TestIDを自動付与 (規則: {ClassName}-{連番3桁})
+                        string testId = GenerateTestId(type.Name, methodIndex);
 
                         // 2. テストタイトルの決定 (メソッド名を優先)
                         string title = method.Name;
@@ -65,10 +68,9 @@ namespace TestSpecCollector
                         // Summaryをタイトルとして採用するロジックを入れても良いが、
                         // 今回は「メソッド名＝タイトル」を基本とするため、Summaryは別カラムへ。
 
-                        // CSV行を追加 (IDの次にClassName)
+                        // CSV行を追加
                         csvBuilder.AppendLine(
                             $"\"{testId}\"," +
-                            $"\"{type.Name}\"," +
                             $"\"{title}\"," +
                             $"\"{xmlInfo.Preconditions}\"," +
                             $"\"{xmlInfo.Steps}\"," +
@@ -110,16 +112,13 @@ namespace TestSpecCollector
             );
         }
 
-        // [TestId] 属性からIDを取得
-        static string GetTestId(MethodInfo m)
+        /// <summary>
+        /// TestIDを自動生成する。規則: {ClassName}-{連番3桁}（クラス内で一意）
+        /// 例: TestSample-001, TestSample-002
+        /// </summary>
+        static string GenerateTestId(string className, int methodIndex)
         {
-            // 参照設定せずに動的に属性値を取得する (依存関係を減らすため)
-            var attr = m.GetCustomAttributes().FirstOrDefault(a => a.GetType().Name == "TestIdAttribute");
-            if (attr == null) return "";
-
-            // "Id" プロパティの値を取得
-            var prop = attr.GetType().GetProperty("Id");
-            return prop?.GetValue(attr)?.ToString() ?? "";
+            return $"{className}-{methodIndex:D3}";
         }
 
         // XMLコメント情報を取得するためのコンテナ

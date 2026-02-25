@@ -1,5 +1,3 @@
-﻿using TestSpecCollectorTests.Attributes;
-
 namespace TestSpecCollectorTests
 {
     public class TestSample
@@ -23,7 +21,6 @@ namespace TestSpecCollectorTests
         /// - ヘッダーに「ようこそ」と表示されること
         /// </expected>
         [Fact]
-        [TestId("USR-001")]
         public void 正常系_有効なユーザーでログインできる()
         {
             // Test Code...
@@ -32,7 +29,6 @@ namespace TestSpecCollectorTests
         // パターン2: 最小限の記述
         // XMLコメントがなくても、メソッド名だけで一覧化可能です。
         [Fact]
-        [TestId("USR-002")]
         public void 異常系_無効なパスワードでエラーになる()
         {
             // Test Code...
