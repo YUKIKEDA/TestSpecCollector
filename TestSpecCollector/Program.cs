@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using System.Text;
 using System.Xml.Linq;
 
@@ -13,13 +13,13 @@ namespace TestSpecCollector
             // ==========================================
 
             // 1. テストプロジェクトのDLLのパス (ビルド済みのもの)
-            string targetDllPath = @"C:\Work\MyProject\MyProject.Tests\bin\Debug\net6.0\MyProject.Tests.dll";
+            string targetDllPath = @"D:\home\Programs\CSharpProjects\TestSpecCollector\TestSpecCollectorTests\bin\Debug\net8.0\TestSpecCollectorTests.dll";
 
             // 2. 生成されたXMLドキュメントのパス
-            string targetXmlPath = @"C:\Work\MyProject\MyProject.Tests\bin\Debug\net6.0\MyProject.Tests.xml";
+            string targetXmlPath = @"D:\home\Programs\CSharpProjects\TestSpecCollector\TestSpecCollectorTests\bin\Debug\net8.0\TestSpecCollectorTests.xml";
 
             // 3. 出力するCSVのパス
-            string outputCsvPath = @"C:\Work\MyProject\TestSpecification.csv";
+            string outputCsvPath = @"D:\home\Programs\CSharpProjects\TestSpecCollector\TestSpecification.csv";
 
             // ==========================================
             // 実行ロジック
@@ -39,7 +39,7 @@ namespace TestSpecCollector
                 var csvBuilder = new StringBuilder();
 
                 // CSVヘッダー (Excelで開きやすい構成)
-                csvBuilder.AppendLine("TestID,Title(MethodName),Preconditions,Steps,ExpectedResult,ClassName,Summary(Optional)");
+                csvBuilder.AppendLine("TestID,ClassName,Title(MethodName),Preconditions,Steps,ExpectedResult,Summary(Optional)");
 
                 int count = 0;
 
@@ -65,14 +65,14 @@ namespace TestSpecCollector
                         // Summaryをタイトルとして採用するロジックを入れても良いが、
                         // 今回は「メソッド名＝タイトル」を基本とするため、Summaryは別カラムへ。
 
-                        // CSV行を追加
+                        // CSV行を追加 (IDの次にClassName)
                         csvBuilder.AppendLine(
                             $"\"{testId}\"," +
+                            $"\"{type.Name}\"," +
                             $"\"{title}\"," +
                             $"\"{xmlInfo.Preconditions}\"," +
                             $"\"{xmlInfo.Steps}\"," +
                             $"\"{xmlInfo.Expected}\"," +
-                            $"\"{type.Name}\"," +
                             $"\"{xmlInfo.Summary}\""
                         );
 

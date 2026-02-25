@@ -6,8 +6,6 @@ namespace TestSpecCollectorTests
     {
         // パターン1: 完全な仕様記述
         // メソッド名がそのまま「テストタイトル」になります。
-        [Fact]
-        [TestId("USR-001")]
         /// <summary>
         /// (省略可能) メソッド名で十分な場合はsummaryを書かなくてOK
         /// </summary>
@@ -24,6 +22,8 @@ namespace TestSpecCollectorTests
         /// - ダッシュボード画面へ遷移すること
         /// - ヘッダーに「ようこそ」と表示されること
         /// </expected>
+        [Fact]
+        [TestId("USR-001")]
         public void 正常系_有効なユーザーでログインできる()
         {
             // Test Code...
@@ -39,11 +39,11 @@ namespace TestSpecCollectorTests
         }
 
         // パターン3: 属性なし（IDなし）
-        [Fact]
         /// <summary>
         /// 管理者権限の確認テスト
         /// </summary>
         /// <expected>設定画面が開くこと</expected>
+        [Fact]
         public void 管理者メニューが表示される()
         {
         }
